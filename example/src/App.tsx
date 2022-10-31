@@ -1,19 +1,43 @@
 import * as React from 'react';
 
-import { StyleSheet, View, Text } from 'react-native';
-import { multiply } from 'react-native-images-gallery';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+
+import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
+import Gallery from 'react-native-images-gallery';
 
 export default function App() {
-  const [result, setResult] = React.useState<number | undefined>();
+  const [isGalleryVisible, setIsGalleryVisible] =
+    React.useState<boolean>(false);
 
-  React.useEffect(() => {
-    multiply(3, 7).then(setResult);
-  }, []);
+  const images = [
+    {
+      uri: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/640px-Image_created_with_a_mobile_phone.png',
+      name: 'name',
+      description: 'string',
+    },
+    {
+      uri: 'https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg',
+      name: 'name',
+      description: 'string',
+    },
+  ];
 
   return (
-    <View style={styles.container}>
-      <Text>Result: {result}</Text>
-    </View>
+    <SafeAreaProvider>
+      <View style={styles.container}>
+        {isGalleryVisible && (
+          <Gallery
+            handleCloseGallery={() => setIsGalleryVisible(false)}
+            images={images}
+          />
+        )}
+        {!isGalleryVisible && (
+          <TouchableOpacity onPress={() => setIsGalleryVisible(true)}>
+            <Text>Open Gallery</Text>
+          </TouchableOpacity>
+        )}
+      </View>
+    </SafeAreaProvider>
   );
 }
 

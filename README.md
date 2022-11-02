@@ -2,19 +2,115 @@
 images gallery component
 ## Installation
 
+### via Yarn
+
 ```sh
-npm install react-native-images-gallery
+yarn add react-native-gesture-handler@2.5.0 @shopify/flash-list@1.1.0 react-native-reanimated@2.9.1 react-native-redash@18.1.0 react-native-safe-area-context@4.3.1
+```
+```sh
+yarn add https://github.com/binarapps/react-native-images-gallery
 ```
 
-## Usage
+### via npm
+```sh
+npm install react-native-gesture-handler@2.5.0 @shopify/flash-list@1.1.0 react-native-reanimated@2.9.1 react-native-redash@18.1.0 react-native-safe-area-context@4.3.1
+```
+
+```sh
+npm install https://github.com/binarapps/react-native-images-gallery
+```
+
+### Add Reanimated's Babel plugin to your babel.config.js:
+```js 
+  module.exports = {
+    presets: [
+      ...
+    ],
+    plugins: [
+      ...
+      'react-native-reanimated/plugin',
+    ],
+  };
+  ```
+  
+  ### Wrap your app with SafeAreaProvider
+  
+  ```js
+  import { SafeAreaProvider } from 'react-native-safe-area-context';
+
+  function App() {
+    return <SafeAreaProvider>...</SafeAreaProvider>;
+  }
+
+  ```
+
+## Example Usage
 
 ```js
-import { multiply } from "react-native-images-gallery";
+import * as React from 'react';
 
-// ...
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
-const result = await multiply(3, 7);
+import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
+import Gallery from 'react-native-images-gallery';
+
+export default function App() {
+  const [isGalleryVisible, setIsGalleryVisible] = React.useState(false);
+
+  const images = [
+    {
+      uri: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/640px-Image_created_with_a_mobile_phone.png',
+      name: 'name',
+      description: 'string',
+    },
+    {
+      uri: 'https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg',
+      name: 'name',
+      description: 'string',
+    },
+  ];
+
+  return (
+    <SafeAreaProvider>
+      <View style={styles.container}>
+        {isGalleryVisible && (
+          <Gallery
+            handleCloseGallery={() => setIsGalleryVisible(false)}
+            images={images}
+          />
+        )}
+        {!isGalleryVisible && (
+          <TouchableOpacity onPress={() => setIsGalleryVisible(true)}>
+            <Text>Open Gallery</Text>
+          </TouchableOpacity>
+        )}
+      </View>
+    </SafeAreaProvider>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  box: {
+    width: 60,
+    height: 60,
+    marginVertical: 20,
+  },
+});
+
 ```
+
+## Troubleshooting
+### Cannot convert undefined or null to Object in JavaScript
+
+Change node version to v16.18.0
+https://apple.stackexchange.com/questions/171530/how-do-i-downgrade-node-or-install-a-specific-previous-version-using-homebrew
+
+
 
 ## Contributing
 

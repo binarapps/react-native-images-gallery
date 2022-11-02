@@ -110,6 +110,10 @@ const styles = StyleSheet.create({
 Change node version to v16.18.0
 https://apple.stackexchange.com/questions/171530/how-do-i-downgrade-node-or-install-a-specific-previous-version-using-homebrew
 
+## Contributors
+
+- [Damian Piętka](https://www.github.com/oscris1) - @oscris1
+- [Mateusz Rostkowski](https://www.github.com/MateuszRostkowski) - @MateuszRostkowski
 
 
 ## Contributing

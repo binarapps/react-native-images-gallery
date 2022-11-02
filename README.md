@@ -1,5 +1,10 @@
 # react-native-images-gallery
 images gallery component
+
+![hippo](https://thumbs.gfycat.com/BouncyShabbyDoctorfish-max-1mb.gif)
+![hippo](https://thumbs.gfycat.com/FrightenedHighAsiansmallclawedotter-max-1mb.gif)
+![hippo](https://thumbs.gfycat.com/GrotesqueUnawareGrassspider-max-1mb.gif) 
+
 ## Installation
 
 ### via Yarn

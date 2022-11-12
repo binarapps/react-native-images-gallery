@@ -2,7 +2,7 @@
   "compilerOptions": {
     "baseUrl": "./",
     "paths": {
-      "react-native-images-gallery": ["./src/index"]
+      "@binarapps/react-native-images-gallery": ["./src/index"]
     },
     "allowUnreachableCode": false,
     "allowUnusedLabels": false,

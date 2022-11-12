@@ -1,9 +1,10 @@
-# react-native-images-gallery
+# @binarapps/react-native-images-gallery
+
 images gallery component
 
 ![hippo](https://thumbs.gfycat.com/BouncyShabbyDoctorfish-max-1mb.gif)
 ![hippo](https://thumbs.gfycat.com/FrightenedHighAsiansmallclawedotter-max-1mb.gif)
-![hippo](https://thumbs.gfycat.com/GrotesqueUnawareGrassspider-max-1mb.gif) 
+![hippo](https://thumbs.gfycat.com/GrotesqueUnawareGrassspider-max-1mb.gif)
 
 ## Installation
 
@@ -12,21 +13,24 @@ images gallery component
 ```sh
 yarn add react-native-gesture-handler@2.5.0 @shopify/flash-list@1.1.0 react-native-reanimated@2.9.1 react-native-redash@18.1.0 react-native-safe-area-context@4.3.1
 ```
+
 ```sh
-yarn add https://github.com/binarapps/react-native-images-gallery
+yarn add @binarapps/react-native-images-gallery
 ```
 
 ### via npm
+
 ```sh
 npm install react-native-gesture-handler@2.5.0 @shopify/flash-list@1.1.0 react-native-reanimated@2.9.1 react-native-redash@18.1.0 react-native-safe-area-context@4.3.1
 ```
 
 ```sh
-npm install https://github.com/binarapps/react-native-images-gallery
+npm install @binarapps/react-native-images-gallery
 ```
 
 ### Add Reanimated's Babel plugin to your babel.config.js:
-```js 
+
+```js
   module.exports = {
     presets: [
       ...
@@ -36,18 +40,17 @@ npm install https://github.com/binarapps/react-native-images-gallery
       'react-native-reanimated/plugin',
     ],
   };
-  ```
-  
-  ### Wrap your app with SafeAreaProvider
-  
-  ```js
-  import { SafeAreaProvider } from 'react-native-safe-area-context';
+```
 
-  function App() {
-    return <SafeAreaProvider>...</SafeAreaProvider>;
-  }
+### Wrap your app with SafeAreaProvider
 
-  ```
+```js
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+
+function App() {
+  return <SafeAreaProvider>...</SafeAreaProvider>;
+}
+```
 
 ## Example Usage
 
@@ -106,10 +109,10 @@ const styles = StyleSheet.create({
     marginVertical: 20,
   },
 });
-
 ```
 
 ## Troubleshooting
+
 ### Cannot convert undefined or null to Object in JavaScript
 
 Change node version to v16.18.0
@@ -119,7 +122,6 @@ https://apple.stackexchange.com/questions/171530/how-do-i-downgrade-node-or-inst
 
 - [Damian Piętka](https://www.github.com/oscris1) - @oscris1
 - [Mateusz Rostkowski](https://www.github.com/MateuszRostkowski) - @MateuszRostkowski
-
 
 ## Contributing
 

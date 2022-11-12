@@ -3,7 +3,7 @@ import * as React from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
-import Gallery from 'react-native-images-gallery';
+import Gallery from '@binarapps/react-native-images-gallery';
 
 export default function App() {
   const [isGalleryVisible, setIsGalleryVisible] =

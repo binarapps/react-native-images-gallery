@@ -1,5 +1,15 @@
-import { FlashList, FlashListProps } from '@shopify/flash-list';
-import React, { FC, useState, ReactNode, useCallback, useMemo } from 'react';
+import {
+  FlashList,
+  FlashListProps,
+  ListRenderItemInfo,
+} from '@shopify/flash-list';
+import React, {
+  useState,
+  ReactNode,
+  useCallback,
+  useMemo,
+  ReactElement,
+} from 'react';
 import {
   Dimensions,
   ActivityIndicator,
@@ -7,6 +17,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   Text,
+  Platform,
 } from 'react-native';
 import Animated, {
   useSharedValue,
@@ -26,23 +37,36 @@ const { width, height } = Dimensions.get('screen');
 export type GalleryImage = {
   uri: string;
   name?: string;
+  type?: string;
   description?: string;
 };
 
-type FullScreenGalleryProps = {
-  images: GalleryImage[];
+type optionalComponent<T> = {
+  type: string;
+  component: (item: T) => JSX.Element;
+};
+
+type FullScreenGalleryProps<T> = {
+  optionalComponentsObject: { [key: string]: (item: T) => ReactElement };
+  images: T[];
   handleCloseGallery: () => void;
   additionalRightTopBarComponent?: ReactNode;
   bottomBarContent?: ReactNode;
+  bottomBarDisabled?: boolean;
+  topBarDisabled?: boolean;
   setCurrentIndex?: (index: number) => void;
   pressedImgIndex?: number;
   closeButtonComponent?: ReactNode;
+  optionalComponents?: optionalComponent<T>[];
+  bg?: {
+    backgroundColor: string;
+  };
 };
 
 const AnimatedFlashList =
-  Animated.createAnimatedComponent<FlashListProps<GalleryImage>>(FlashList);
+  Animated.createAnimatedComponent<FlashListProps<any>>(FlashList);
 
-export const Gallery: FC<FullScreenGalleryProps> = ({
+export const Gallery = <T extends GalleryImage>({
   images,
   handleCloseGallery,
   additionalRightTopBarComponent,
@@ -50,7 +74,11 @@ export const Gallery: FC<FullScreenGalleryProps> = ({
   setCurrentIndex,
   pressedImgIndex,
   closeButtonComponent,
-}) => {
+  bottomBarDisabled = false,
+  topBarDisabled = false,
+  bg,
+  optionalComponentsObject,
+}: FullScreenGalleryProps<T>) => {
   const [isOnlyImageMode, toggleImageMode] = useToggle(true);
   const { top, bottom } = useSafeAreaInsets();
   const [isZoomed, setIsZoomed] = useState(false);
@@ -106,7 +134,11 @@ export const Gallery: FC<FullScreenGalleryProps> = ({
               style={[helpers.colorWhite, helpers.fonstSize20]}
             />
             <Text
-              style={[helpers.colorWhite, helpers.fonstSize20, helpers.mx6]}
+              style={[
+                helpers.colorWhite,
+                helpers.fonstSize20,
+                Platform.OS === 'ios' ? helpers.mx6 : helpers.mr7,
+              ]}
             >
               /
             </Text>
@@ -165,7 +197,22 @@ export const Gallery: FC<FullScreenGalleryProps> = ({
   }, [isLoading]);
 
   const renderItem = useCallback(
-    ({ item }: { item: GalleryImage }) => {
+    ({ item }: ListRenderItemInfo<T>) => {
+      if (item?.type) {
+        const renderDifferentType = optionalComponentsObject[item.type];
+        if (renderDifferentType) {
+          return (
+            <TouchableOpacity
+              activeOpacity={1}
+              onPress={toggleImageMode}
+              style={styles.imageModeWrapper}
+            >
+              {React.createElement(renderDifferentType, item)}
+            </TouchableOpacity>
+          );
+        }
+      }
+
       return (
         <ZoomableImage
           uri={item.uri}
@@ -177,14 +224,19 @@ export const Gallery: FC<FullScreenGalleryProps> = ({
         />
       );
     },
-    [isZoomed, stopLoading, isScrolling, toggleImageMode]
+    [
+      toggleImageMode,
+      isZoomed,
+      stopLoading,
+      isScrolling,
+      optionalComponentsObject,
+    ]
   );
-
   const keyExtractor = useCallback((item: GalleryImage) => item.uri, []);
 
   return (
-    <View style={styles.galleryBackground}>
-      {isOnlyImageMode && renderTopBar}
+    <View style={[bg ? bg : styles.galleryBackground, helpers.flex1]}>
+      {!topBarDisabled && isOnlyImageMode && renderTopBar}
       {renderLoader}
 
       <View style={styles.imagesList}>
@@ -205,7 +257,7 @@ export const Gallery: FC<FullScreenGalleryProps> = ({
         />
       </View>
 
-      {isOnlyImageMode && renderBottomBar}
+      {isOnlyImageMode && !bottomBarDisabled && renderBottomBar}
     </View>
   );
 };
@@ -247,12 +299,20 @@ const styles = StyleSheet.create({
     width: 100,
     height: 50,
   },
+  imageModeWrapper: {
+    width,
+    height,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
 });
 
 const helpers = StyleSheet.create({
+  flex1: { flex: 1 },
   pt12: { paddingTop: 12 },
   pb12: { paddingBottom: 12 },
   mx6: { marginHorizontal: 6 },
+  mr7: { marginRight: 7 },
   bottom0: { bottom: 0 },
   colorWhite: { color: 'white' },
   width10percent: { width: '10%' },

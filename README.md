@@ -8,20 +8,20 @@ images gallery component
 
 ## Installation
 
-### via Yarn
+### via Yarn (Expo 47)
 
 ```sh
-yarn add react-native-gesture-handler@2.5.0 @shopify/flash-list@1.1.0 react-native-reanimated@2.9.1 react-native-redash@18.1.0 react-native-safe-area-context@4.3.1
+yarn add react-native-gesture-handler@2.8.0 @shopify/flash-list@1.3.1 react-native-reanimated@2.12.0 react-native-redash@18.1.0 react-native-safe-area-context@4.4.1
 ```
 
 ```sh
 yarn add @binarapps/react-native-images-gallery
 ```
 
-### via npm
+### via npm (Expo 47)
 
 ```sh
-npm install react-native-gesture-handler@2.5.0 @shopify/flash-list@1.1.0 react-native-reanimated@2.9.1 react-native-redash@18.1.0 react-native-safe-area-context@4.3.1
+npm install react-native-gesture-handler@2.8.0 @shopify/flash-list@1.3.1 react-native-reanimated@2.12.0 react-native-redash@18.1.0 react-native-safe-area-context@4.4.1
 ```
 
 ```sh

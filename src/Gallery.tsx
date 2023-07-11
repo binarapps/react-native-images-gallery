@@ -9,6 +9,7 @@ import React, {
   useCallback,
   useMemo,
   ReactElement,
+  useEffect,
 } from 'react';
 import {
   Dimensions,
@@ -41,14 +42,28 @@ export type GalleryImage = {
   description?: string;
 };
 
-type optionalComponent<T> = {
-  type: string;
-  component: (item: T) => JSX.Element;
-};
-
-type FullScreenGalleryProps<T> = {
-  optionalComponentsObject?: { [key: string]: (item: T) => ReactElement };
+type FullScreenGalleryProps<T extends GalleryImage> = {
+  /**
+   * **Exmaples of spacing usage:**
+   *  [
+   *   {
+   *    uri: 'https://d23dyxeqlo5psv.cloudfront.net/big_buck_bunny.mp4',
+   *    name: 'video',
+   *    type: 'video',
+   *    description: 'string',
+   *   },
+   *   {
+   *    uri: 'https://images.pexels.com/photos/189349/pexels-photo-189349.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500',
+   *    name: 'name',
+   *    type: 'img',
+   *    description: 'string',
+   *   },
+   *  ];
+   */
   images: T[];
+  /**
+   * **This function will be executed when closing gallery**
+   */
   handleCloseGallery: () => void;
   additionalRightTopBarComponent?: ReactNode;
   bottomBarContent?: ReactNode;
@@ -57,10 +72,12 @@ type FullScreenGalleryProps<T> = {
   setCurrentIndex?: (index: number) => void;
   pressedImgIndex?: number;
   closeButtonComponent?: ReactNode;
-  optionalComponents?: optionalComponent<T>[];
-  bg?: {
-    backgroundColor: string;
-  };
+  bg?:
+    | {
+        backgroundColor: string;
+      }
+    | string;
+  optionalComponentsObject?: { [key: string]: (item: T) => ReactElement };
 };
 
 const AnimatedFlashList =
@@ -71,11 +88,11 @@ export const Gallery = <T extends GalleryImage>({
   handleCloseGallery,
   additionalRightTopBarComponent,
   bottomBarContent,
+  bottomBarDisabled = false,
+  topBarDisabled = false,
   setCurrentIndex,
   pressedImgIndex,
   closeButtonComponent,
-  bottomBarDisabled = false,
-  topBarDisabled = false,
   bg,
   optionalComponentsObject = {},
 }: FullScreenGalleryProps<T>) => {
@@ -84,6 +101,31 @@ export const Gallery = <T extends GalleryImage>({
   const [isZoomed, setIsZoomed] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [isScrolling, setIsScrolling] = useState(false);
+
+  useEffect(() => {
+    const optionalKeys = Object.keys(optionalComponentsObject);
+    const imagesWithoutImg = images.filter((image) => image.type !== 'img');
+
+    if (imagesWithoutImg.length <= 0) {
+      return;
+    }
+
+    if (optionalKeys.length <= 0) {
+      return;
+    }
+
+    if (
+      imagesWithoutImg.some((image) => !optionalKeys.includes(image.type ?? ''))
+    ) {
+      console.warn(
+        'You have to provide optionalComponentsObject for all types of images',
+        'Provided data types',
+        imagesWithoutImg.map((image) => image.type),
+        'Provided optionalComponentsObject keys',
+        optionalKeys
+      );
+    }
+  }, [images, optionalComponentsObject]);
 
   const stopLoading = useCallback(() => {
     setIsLoading(false);
@@ -233,9 +275,15 @@ export const Gallery = <T extends GalleryImage>({
     ]
   );
   const keyExtractor = useCallback((item: GalleryImage) => item.uri, []);
+  const backgroundStyes =
+    typeof bg === 'string'
+      ? { backgroundColor: bg }
+      : bg
+      ? bg
+      : styles.galleryBackground;
 
   return (
-    <View style={[bg ? bg : styles.galleryBackground, helpers.flex1]}>
+    <View style={[backgroundStyes, helpers.flex1]}>
       {!topBarDisabled && isOnlyImageMode && renderTopBar}
       {renderLoader}
 

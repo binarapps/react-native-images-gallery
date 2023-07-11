@@ -6,6 +6,12 @@ export const dataWithMoviesAndComponents = [
     description: 'string',
   },
   {
+    uri: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/640px-Image_created_with_a_mobile_phones.png',
+    name: 'namse',
+    type: 'siema',
+    description: 'string',
+  },
+  {
     uri: 'https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg',
     name: 'name',
     type: 'img',

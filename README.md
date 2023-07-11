@@ -8,27 +8,53 @@ images gallery component
 
 ## Installation
 
-### via Yarn
+<details>
+  <summary>Expo</summary>
+  
+```bash
+expo install react-native-gesture-handler @shopify/flash-list react-native-reanimated react-native-safe-area-context
+## only if using expo-dev-client
+expo prebuild
+```
+
+#### via Yarn
+
+```bash
+yarn add @binarapps/react-native-images-gallery
+```
+
+#### via npm
 
 ```sh
-yarn add react-native-gesture-handler@2.5.0 @shopify/flash-list@1.1.0 react-native-reanimated@2.9.1 react-native-redash@18.1.0 react-native-safe-area-context@4.3.1
+npm install @binarapps/react-native-images-gallery
+```
+
+</details>
+
+<details>
+  <summary>React native</summary>
+    
+#### via Yarn
+
+```sh
+yarn add react-native-gesture-handler @shopify/flash-list react-native-reanimated react-native-safe-area-context
 ```
 
 ```sh
 yarn add @binarapps/react-native-images-gallery
 ```
 
-### via npm
+#### via npm
 
 ```sh
-npm install react-native-gesture-handler@2.5.0 @shopify/flash-list@1.1.0 react-native-reanimated@2.9.1 react-native-redash@18.1.0 react-native-safe-area-context@4.3.1
+npm install react-native-gesture-handler @shopify/flash-list react-native-reanimated react-native-redash react-native-safe-area-context
 ```
 
 ```sh
 npm install @binarapps/react-native-images-gallery
 ```
 
-### Add Reanimated's Babel plugin to your babel.config.js:
+#### Add Reanimated's Babel plugin to your babel.config.js:
 
 ```js
   module.exports = {
@@ -42,6 +68,8 @@ npm install @binarapps/react-native-images-gallery
   };
 ```
 
+  </details>
+
 ### Wrap your app with SafeAreaProvider
 
 ```js
@@ -52,7 +80,9 @@ function App() {
 }
 ```
 
-## Example Usage
+## Examples
+
+### Usage with images
 
 ```js
 import * as React from 'react';

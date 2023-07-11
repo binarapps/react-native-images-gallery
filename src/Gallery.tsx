@@ -24,13 +24,13 @@ import Animated, {
   useAnimatedScrollHandler,
   runOnJS,
 } from 'react-native-reanimated';
-import { ReText } from 'react-native-redash';
 
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { ZoomableImage } from './ZoomableImage';
 
 import { useToggle } from './hooks/useToggle';
+import { ReText } from './components/ReText';
 
 const { width, height } = Dimensions.get('screen');
 
@@ -47,7 +47,7 @@ type optionalComponent<T> = {
 };
 
 type FullScreenGalleryProps<T> = {
-  optionalComponentsObject: { [key: string]: (item: T) => ReactElement };
+  optionalComponentsObject?: { [key: string]: (item: T) => ReactElement };
   images: T[];
   handleCloseGallery: () => void;
   additionalRightTopBarComponent?: ReactNode;
@@ -77,7 +77,7 @@ export const Gallery = <T extends GalleryImage>({
   bottomBarDisabled = false,
   topBarDisabled = false,
   bg,
-  optionalComponentsObject,
+  optionalComponentsObject = {},
 }: FullScreenGalleryProps<T>) => {
   const [isOnlyImageMode, toggleImageMode] = useToggle(true);
   const { top, bottom } = useSafeAreaInsets();

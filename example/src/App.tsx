@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useMemo, useState } from 'react';
 
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
@@ -8,100 +8,53 @@ import {
   Text,
   TouchableOpacity,
   Dimensions,
-  TouchableHighlight,
-  Image,
 } from 'react-native';
-import { Video, ResizeMode } from 'expo-av';
-import { data } from './mockedData';
 
-import Gallery, { GalleryImage } from '@binarapps/react-native-images-gallery';
+import { ImagesGalery } from './galeries/ImagesGalery';
+import { ContentGalery } from './galeries/ContentGalery';
 
 const { width, height } = Dimensions.get('screen');
 
 export default function App() {
-  const [isGalleryVisible, setIsGalleryVisible] =
-    React.useState<boolean>(false);
+  const [galeryOpenType, setGaleryOpenType] = useState<
+    'none' | 'images' | 'mixed'
+  >('none');
 
-  const video = React.useRef(null);
+  const renderGalery = useMemo(() => {
+    if (galeryOpenType === 'images') {
+      return <ImagesGalery onCloseGalery={() => setGaleryOpenType('none')} />;
+    }
+    if (galeryOpenType === 'mixed') {
+      return <ContentGalery onCloseGalery={() => setGaleryOpenType('none')} />;
+    }
+    return null;
+  }, [galeryOpenType]);
 
-  const renderVideo = useCallback(
-    ({ uri }: GalleryImage): JSX.Element => (
-      <View style={styles.videoBox}>
-        <TouchableHighlight>
-          <Video
-            ref={video}
-            style={styles.video}
-            source={{
-              uri,
-            }}
-            useNativeControls
-            resizeMode={ResizeMode.CONTAIN}
-          />
-        </TouchableHighlight>
-      </View>
-    ),
-    []
-  );
+  const renderButtons = useMemo(() => {
+    if (galeryOpenType === 'none') {
+      return (
+        <>
+          <TouchableOpacity onPress={() => setGaleryOpenType('images')}>
+            <Text>Open Images Gallery</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => setGaleryOpenType('mixed')}>
+            <Text>Open Mixed Gallery</Text>
+          </TouchableOpacity>
+        </>
+      );
+    }
+    return null;
+  }, [galeryOpenType]);
 
   return (
     <SafeAreaProvider>
       <View style={styles.container}>
-        {isGalleryVisible && (
-          <Gallery
-            bg={styles.bgColor}
-            handleCloseGallery={() => setIsGalleryVisible(false)}
-            images={data}
-            bottomBarDisabled
-            optionalComponentsObject={{
-              video: renderVideo,
-              card: Card,
-            }}
-          />
-        )}
-        {!isGalleryVisible && (
-          <TouchableOpacity onPress={() => setIsGalleryVisible(true)}>
-            <Text>Open Gallery</Text>
-          </TouchableOpacity>
-        )}
+        {renderGalery}
+        {renderButtons}
       </View>
     </SafeAreaProvider>
   );
 }
-
-const Card = ({
-  content,
-  name,
-  uri,
-}: GalleryImage & { content?: string }): JSX.Element => {
-  const [isTextMode, setIsTextMode] = React.useState<boolean>(true);
-
-  return (
-    <View style={styles.card}>
-      {isTextMode ? (
-        <>
-          <Text style={styles.cardHeaderText}>{name}</Text>
-          <View style={styles.contentWrapper}>
-            <Image source={{ uri }} style={styles.smallPicture} />
-            <Text>{content}</Text>
-          </View>
-          <TouchableOpacity
-            style={styles.blueButton}
-            onPress={() => setIsTextMode(false)}
-          >
-            <Text style={styles.blueButtonText}>Press me</Text>
-          </TouchableOpacity>
-        </>
-      ) : (
-        <TouchableOpacity
-          onPress={() => setIsTextMode(true)}
-          style={styles.bigPictureWrapper}
-        >
-          <Image source={{ uri }} style={styles.bigPicture} />
-        </TouchableOpacity>
-      )}
-    </View>
-  );
-};
 
 const styles = StyleSheet.create({
   bgColor: { backgroundColor: 'black' },
